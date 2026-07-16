@@ -1,0 +1,1535 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Indoor Monitor V2 — Four Reference Styles</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+
+    body {
+      min-width: 520px;
+      padding: 38px 26px 52px;
+      background: #e8eaec;
+      color: #151515;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .page-intro {
+      width: min(2032px, 100%);
+      margin: 0 auto 26px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .page-kicker {
+      margin-bottom: 6px;
+      color: #666f76;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .page-intro h1 {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 44px);
+      letter-spacing: -.045em;
+    }
+
+    .page-intro p {
+      max-width: 720px;
+      margin: 8px 0 0;
+      color: #68737a;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .page-badge {
+      flex: 0 0 auto;
+      padding: 9px 14px;
+      border: 1px solid #ccd1d4;
+      background: rgba(255,255,255,.7);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .gallery-grid {
+      width: min(2032px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 480px);
+      gap: 28px;
+      justify-content: center;
+      align-items: start;
+    }
+
+    .concept { width: 480px; }
+
+    .concept-meta {
+      min-height: 70px;
+      padding: 0 2px 13px;
+    }
+
+    .concept-number {
+      color: #737c82;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .concept-meta h2 {
+      margin: 5px 0 2px;
+      font-size: 20px;
+      letter-spacing: -.025em;
+    }
+
+    .concept-meta p {
+      margin: 0;
+      color: #6d777d;
+      font-size: 11px;
+    }
+
+    .monitor-screen {
+      --screen-bg: #f7f4ef;
+      --card: #faf8f4;
+      --text: #171512;
+      --muted: #716c65;
+      --line: #d8d2ca;
+      --track: #e4dfd8;
+      --status: #2c7356;
+      --status-bg: #e8f1eb;
+      position: relative;
+      width: 480px;
+      height: 480px;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--screen-bg);
+      color: var(--text);
+      border-radius: 24px;
+      box-shadow: 0 20px 46px rgba(25, 31, 35, .15);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .monitor-screen[data-theme="editorial"] {
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .monitor-screen[data-theme="swiss"] {
+      --screen-bg: #f7f7f7;
+      --card: #fff;
+      --text: #050505;
+      --muted: #575757;
+      --line: #bfc1c3;
+      --track: #dddddd;
+      --status: #e10600;
+      --status-bg: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .monitor-screen[data-theme="illustrative"] {
+      --screen-bg: #fffaf6;
+      --card: #fff;
+      --text: #25213e;
+      --muted: #746f86;
+      --line: #eee9f1;
+      --track: #ece9f2;
+      --status: #438469;
+      --status-bg: #eaf6ef;
+      font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    }
+
+    .monitor-screen[data-theme="brutal"] {
+      --screen-bg: #0c0d0d;
+      --card: #111313;
+      --text: #f1f4f2;
+      --muted: #9aa39f;
+      --line: #3a403e;
+      --track: #26302d;
+      --status: #00f5c3;
+      --status-bg: #102d27;
+      border-radius: 0;
+      background:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px),
+        #0c0d0d;
+      background-size: 24px 24px;
+      font-family: "Arial Narrow", "Roboto Condensed", Consolas, monospace;
+      box-shadow: 0 20px 48px rgba(0,0,0,.35);
+    }
+
+    .screen-view {
+      position: absolute;
+      inset: 0;
+      background: transparent;
+    }
+
+    .enter-forward { animation: enterForward 190ms ease-out both; }
+    .enter-back { animation: enterBack 190ms ease-out both; }
+
+    @keyframes enterForward {
+      from { opacity: .4; transform: translateX(24px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes enterBack {
+      from { opacity: .4; transform: translateX(-24px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .home-header {
+      position: absolute;
+      top: 16px;
+      left: 18px;
+      right: 18px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-code {
+      width: 50px;
+      height: 54px;
+      flex: 0 0 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--line);
+      color: var(--text);
+      font-size: 39px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -.08em;
+    }
+
+    .monitor-screen[data-theme="swiss"] .header-code {
+      border-right: 0;
+      background: #e10600;
+      color: white;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .header-code {
+      border: 0;
+      border-radius: 17px;
+      background: #eeeaff;
+      color: #6c5ce7;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .monitor-screen[data-theme="brutal"] .header-code {
+      border: 1px solid var(--line);
+      background: #101313;
+      color: #00f5c3;
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .header-copy {
+      min-width: 0;
+      margin-left: 13px;
+    }
+
+    .header-kicker {
+      margin-bottom: 2px;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5px;
+      font-weight: 850;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .home-title {
+      margin: 0;
+      overflow: hidden;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -.035em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .monitor-screen[data-theme="swiss"] .home-title {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .home-title {
+      font-size: 23px;
+      font-weight: 850;
+    }
+
+    .monitor-screen[data-theme="brutal"] .home-title {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: .025em;
+      text-transform: uppercase;
+    }
+
+    .home-subtitle {
+      margin-top: 3px;
+      overflow: hidden;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .monitor-screen[data-theme="brutal"] .home-subtitle {
+      color: #00cda4;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .live-pill {
+      position: absolute;
+      top: 4px;
+      right: 0;
+      height: 27px;
+      padding: 0 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--status);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5px;
+      font-weight: 850;
+      letter-spacing: .08em;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .live-pill {
+      border: 0;
+      border-radius: 999px;
+      background: var(--status-bg);
+    }
+
+    .monitor-screen[data-theme="brutal"] .live-pill {
+      background: #0c0d0d;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .sensor-grid {
+      position: absolute;
+      top: 88px;
+      left: 18px;
+      width: 444px;
+      display: grid;
+      grid-template-columns: repeat(2, 216px);
+      grid-auto-rows: 176px;
+      gap: 12px;
+    }
+
+    .metric-card {
+      --accent: #9c805f;
+      --tint: #efe6dc;
+      position: relative;
+      overflow: hidden;
+      padding: 14px 14px 12px;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .monitor-screen[data-theme="editorial"] .metric-card:nth-child(2),
+    .monitor-screen[data-theme="editorial"] .metric-card:nth-child(3) {
+      background: #f4f0e9;
+    }
+
+    .monitor-screen[data-theme="swiss"] .metric-card {
+      padding: 13px 13px 11px;
+      border-width: 1px;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .metric-card {
+      border-color: color-mix(in srgb, var(--accent) 14%, white);
+      border-radius: 21px;
+      background: linear-gradient(145deg, white 55%, var(--tint));
+      box-shadow: 0 7px 16px rgba(79, 65, 105, .07);
+    }
+
+    .monitor-screen[data-theme="brutal"] .metric-card {
+      border-color: var(--line);
+      background: rgba(17,19,19,.94);
+    }
+
+    .card-index {
+      position: absolute;
+      top: 10px;
+      right: 11px;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .09em;
+    }
+
+    .monitor-screen[data-theme="swiss"] .card-index {
+      top: 0;
+      right: 0;
+      width: 29px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      background: #e10600;
+      color: white;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .card-index { display: none; }
+
+    .monitor-screen[data-theme="brutal"] .card-index {
+      top: 9px;
+      right: 10px;
+      color: var(--accent);
+    }
+
+    .card-head {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .metric-icon-shell {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      color: var(--accent);
+    }
+
+    .monitor-screen[data-theme="editorial"] .metric-icon-shell {
+      border: 0;
+      border-bottom: 1px solid var(--accent);
+      background: transparent;
+    }
+
+    .monitor-screen[data-theme="swiss"] .metric-icon-shell {
+      border-color: #111;
+      background: #fff;
+      color: #111;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .metric-icon-shell {
+      border: 0;
+      border-radius: 12px;
+      background: var(--tint);
+    }
+
+    .monitor-screen[data-theme="brutal"] .metric-icon-shell {
+      border-color: var(--accent);
+      background: #0c0e0d;
+    }
+
+    .metric-icon-shell svg,
+    .gauge-icon svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .metric-name {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .monitor-screen[data-theme="editorial"] .metric-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+
+    .monitor-screen[data-theme="swiss"] .metric-name,
+    .monitor-screen[data-theme="brutal"] .metric-name {
+      letter-spacing: .045em;
+      text-transform: uppercase;
+    }
+
+    .metric-value-row {
+      position: relative;
+      z-index: 2;
+      height: 48px;
+      margin-top: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .metric-value {
+      font-size: 37px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -.055em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monitor-screen[data-theme="editorial"] .metric-value {
+      font-size: 39px;
+      font-weight: 400;
+    }
+
+    .monitor-screen[data-theme="swiss"] .metric-value {
+      font-size: 37px;
+      font-weight: 900;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .metric-value {
+      font-size: 36px;
+      font-weight: 900;
+    }
+
+    .monitor-screen[data-theme="brutal"] .metric-value {
+      color: var(--accent);
+      font-size: 35px;
+      font-weight: 900;
+      letter-spacing: -.025em;
+    }
+
+    .metric-unit {
+      max-width: 53px;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      line-height: 1.05;
+      white-space: normal;
+    }
+
+    .metric-track {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 48px;
+      height: 3px;
+      background: var(--track);
+    }
+
+    .metric-track-fill {
+      display: block;
+      width: var(--progress);
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .monitor-screen[data-theme="swiss"] .metric-track {
+      height: 5px;
+      background:
+        repeating-linear-gradient(90deg, #d7d7d7 0 1px, transparent 1px 14px);
+    }
+
+    .monitor-screen[data-theme="illustrative"] .metric-track {
+      height: 5px;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .monitor-screen[data-theme="brutal"] .metric-track {
+      height: 4px;
+      border: 1px solid var(--line);
+      background: #090a0a;
+    }
+
+    .card-footer {
+      position: absolute;
+      left: 14px;
+      right: 12px;
+      bottom: 10px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-status {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 6px;
+      border-radius: 50%;
+      background: var(--status);
+    }
+
+    .monitor-screen[data-theme="swiss"] .status-dot,
+    .monitor-screen[data-theme="brutal"] .status-dot {
+      border-radius: 0;
+    }
+
+    .more-button {
+      min-width: 60px;
+      height: 28px;
+      padding: 0 9px;
+      border: 1px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9px;
+      font-weight: 850;
+    }
+
+    .monitor-screen[data-theme="editorial"] .more-button {
+      border: 0;
+      border-bottom: 1px solid var(--text);
+      padding: 0 2px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 10px;
+      font-weight: 400;
+    }
+
+    .monitor-screen[data-theme="swiss"] .more-button {
+      border-color: #e10600;
+      background: #e10600;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .more-button {
+      border: 0;
+      border-radius: 999px;
+      background: var(--tint);
+      color: var(--accent);
+    }
+
+    .monitor-screen[data-theme="brutal"] .more-button {
+      border-color: var(--accent);
+      background: #0b0d0c;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .more-arrow { margin-left: 4px; font-size: 13px; }
+
+    .illustration-motif {
+      position: absolute;
+      z-index: 1;
+      top: 53px;
+      right: 7px;
+      width: 76px;
+      height: 61px;
+      display: none;
+      pointer-events: none;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .illustration-motif { display: block; }
+
+    .motif-sun,
+    .motif-hill,
+    .motif-leaf-a,
+    .motif-leaf-b {
+      position: absolute;
+      display: block;
+    }
+
+    .motif-sun {
+      top: 3px;
+      right: 11px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--accent) 75%, #ffd166);
+    }
+
+    .motif-hill {
+      right: 1px;
+      bottom: 0;
+      width: 69px;
+      height: 34px;
+      border-radius: 50% 50% 9px 9px;
+      background: color-mix(in srgb, var(--accent) 16%, white);
+      transform: rotate(-5deg);
+    }
+
+    .motif-leaf-a,
+    .motif-leaf-b {
+      width: 13px;
+      height: 26px;
+      border-radius: 100% 0 100% 0;
+      background: color-mix(in srgb, var(--accent) 62%, #7ed6a5);
+    }
+
+    .motif-leaf-a { left: 16px; bottom: 4px; transform: rotate(-28deg); }
+    .motif-leaf-b { left: 29px; bottom: 7px; transform: rotate(25deg) scale(.78); }
+
+    .detail-header {
+      position: absolute;
+      top: 15px;
+      left: 18px;
+      right: 18px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+    }
+
+    .back-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .back-button svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .monitor-screen[data-theme="editorial"] .back-button {
+      border: 0;
+      border-bottom: 1px solid var(--text);
+      background: transparent;
+    }
+
+    .monitor-screen[data-theme="swiss"] .back-button {
+      border-color: #111;
+      background: #111;
+      color: white;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .back-button {
+      border: 0;
+      border-radius: 14px;
+      background: #eeeaff;
+      color: #6c5ce7;
+    }
+
+    .monitor-screen[data-theme="brutal"] .back-button {
+      border-color: #00f5c3;
+      background: #0b0d0c;
+      color: #00f5c3;
+    }
+
+    .detail-heading {
+      min-width: 0;
+      margin-left: 12px;
+    }
+
+    .detail-title {
+      margin: 0;
+      overflow: hidden;
+      font-size: 22px;
+      font-weight: 650;
+      line-height: 1.05;
+      letter-spacing: -.035em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .monitor-screen[data-theme="swiss"] .detail-title {
+      font-size: 21px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .detail-title { font-weight: 900; }
+
+    .monitor-screen[data-theme="brutal"] .detail-title {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .detail-subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5px;
+      letter-spacing: .025em;
+    }
+
+    .monitor-screen[data-theme="brutal"] .detail-subtitle {
+      color: #00cda4;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .detail-header .live-pill { top: 8px; }
+
+    .gauge-zone {
+      position: absolute;
+      top: 67px;
+      left: 90px;
+      width: 300px;
+      height: 266px;
+      color: var(--accent);
+    }
+
+    .gauge-svg {
+      position: absolute;
+      inset: 0;
+      width: 300px;
+      height: 266px;
+      overflow: visible;
+    }
+
+    .gauge-track,
+    .gauge-progress {
+      fill: none;
+      stroke-linecap: round;
+    }
+
+    .gauge-track { stroke: var(--track); stroke-width: 11px; }
+    .gauge-progress { stroke: var(--accent); stroke-width: 11px; }
+
+    .monitor-screen[data-theme="editorial"] .gauge-track,
+    .monitor-screen[data-theme="editorial"] .gauge-progress {
+      stroke-width: 8px;
+    }
+
+    .monitor-screen[data-theme="swiss"] .gauge-track,
+    .monitor-screen[data-theme="swiss"] .gauge-progress {
+      stroke-width: 14px;
+      stroke-linecap: butt;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .gauge-track,
+    .monitor-screen[data-theme="illustrative"] .gauge-progress {
+      stroke-width: 14px;
+    }
+
+    .monitor-screen[data-theme="brutal"] .gauge-track,
+    .monitor-screen[data-theme="brutal"] .gauge-progress {
+      stroke-width: 8px;
+      stroke-linecap: square;
+    }
+
+    .gauge-dot-halo { fill: var(--screen-bg); }
+    .gauge-dot { fill: var(--accent); }
+
+    .monitor-screen[data-theme="swiss"] .gauge-dot { fill: #111; }
+
+    .gauge-core {
+      position: absolute;
+      top: 59px;
+      left: 77px;
+      width: 146px;
+      text-align: center;
+    }
+
+    .gauge-icon {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 8px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: var(--tint);
+      color: var(--accent);
+    }
+
+    .gauge-icon svg { width: 30px; height: 30px; }
+
+    .monitor-screen[data-theme="editorial"] .gauge-icon {
+      border: 0;
+      border-bottom: 1px solid var(--accent);
+      background: transparent;
+    }
+
+    .monitor-screen[data-theme="swiss"] .gauge-icon {
+      border: 2px solid #111;
+      background: white;
+      color: #111;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .gauge-icon {
+      width: 66px;
+      height: 66px;
+      border: 0;
+      border-radius: 22px;
+      background: var(--tint);
+      transform: rotate(-4deg);
+    }
+
+    .monitor-screen[data-theme="illustrative"] .gauge-icon svg { transform: rotate(4deg); }
+
+    .monitor-screen[data-theme="brutal"] .gauge-icon {
+      border-color: var(--accent);
+      background: #0d1110;
+    }
+
+    .gauge-round-value {
+      font-size: 27px;
+      font-weight: 650;
+      line-height: 1;
+      letter-spacing: -.045em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monitor-screen[data-theme="editorial"] .gauge-round-value {
+      font-size: 29px;
+      font-weight: 400;
+    }
+
+    .monitor-screen[data-theme="swiss"] .gauge-round-value {
+      font-size: 29px;
+      font-weight: 900;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .gauge-round-value {
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .monitor-screen[data-theme="brutal"] .gauge-round-value {
+      color: var(--accent);
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .gauge-caption {
+      margin-top: 5px;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .monitor-screen[data-theme="brutal"] .gauge-caption { color: #c7ceca; }
+
+    .range-end,
+    .range-note {
+      position: absolute;
+      top: 223px;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5px;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    .range-min { left: 20px; width: 48px; }
+    .range-max { right: 20px; width: 48px; }
+
+    .range-note {
+      left: 63px;
+      width: 174px;
+      line-height: 1.25;
+    }
+
+    .monitor-screen[data-theme="brutal"] .range-note {
+      color: var(--accent);
+      letter-spacing: .045em;
+      text-transform: uppercase;
+    }
+
+    .illustration-orbit {
+      position: absolute;
+      top: 25px;
+      left: 27px;
+      width: 246px;
+      height: 202px;
+      display: none;
+      border-radius: 46% 54% 50% 44%;
+      background: color-mix(in srgb, var(--accent) 7%, transparent);
+      transform: rotate(-7deg);
+      pointer-events: none;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .illustration-orbit { display: block; }
+
+    .reading-panel {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      height: 124px;
+      padding: 13px 16px 11px;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .monitor-screen[data-theme="editorial"] .reading-panel {
+      border-right: 0;
+      border-left: 0;
+      background: transparent;
+    }
+
+    .monitor-screen[data-theme="swiss"] .reading-panel {
+      border: 2px solid #111;
+      background: white;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .reading-panel {
+      border: 0;
+      border-radius: 22px;
+      background: linear-gradient(145deg, white, var(--tint));
+      box-shadow: 0 8px 18px rgba(79, 65, 105, .08);
+    }
+
+    .monitor-screen[data-theme="brutal"] .reading-panel {
+      border-color: var(--line);
+      background: rgba(16,18,18,.96);
+    }
+
+    .reading-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .reading-caption {
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .detail-status {
+      height: 25px;
+      padding: 0 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: var(--status-bg);
+      color: var(--status);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .detail-status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: currentColor;
+      border-radius: 50%;
+    }
+
+    .monitor-screen[data-theme="editorial"] .detail-status {
+      border: 0;
+      border-bottom: 1px solid var(--status);
+      background: transparent;
+    }
+
+    .monitor-screen[data-theme="swiss"] .detail-status {
+      border-color: #e10600;
+      background: #e10600;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .detail-status {
+      border: 0;
+      border-radius: 999px;
+    }
+
+    .monitor-screen[data-theme="brutal"] .detail-status {
+      border-color: var(--status);
+      background: #0b0f0e;
+      text-transform: uppercase;
+    }
+
+    .monitor-screen[data-theme="swiss"] .detail-status::before,
+    .monitor-screen[data-theme="brutal"] .detail-status::before { border-radius: 0; }
+
+    .reading-main {
+      height: 52px;
+      margin-top: 2px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .reading-value {
+      font-size: 46px;
+      font-weight: 650;
+      line-height: 1;
+      letter-spacing: -.055em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monitor-screen[data-theme="editorial"] .reading-value {
+      font-size: 49px;
+      font-weight: 400;
+    }
+
+    .monitor-screen[data-theme="swiss"] .reading-value {
+      font-weight: 900;
+    }
+
+    .monitor-screen[data-theme="illustrative"] .reading-value {
+      font-weight: 900;
+    }
+
+    .monitor-screen[data-theme="brutal"] .reading-value {
+      color: var(--accent);
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+
+    .reading-unit {
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .reading-meta {
+      padding-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5px;
+      font-weight: 650;
+    }
+
+    .reading-meta strong { color: var(--text); }
+
+    .monitor-screen[data-theme="brutal"] .reading-meta {
+      color: #98a09c;
+      text-transform: uppercase;
+    }
+
+    .page-footer {
+      width: min(2032px, 100%);
+      margin: 23px auto 0;
+      color: #717b81;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .board-grid {
+      width: max-content;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 480px);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .board-column {
+      width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .board-title {
+      height: 48px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      color: #465158;
+      font-size: 19px;
+      font-weight: 850;
+    }
+
+    .board-title small {
+      color: #788187;
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    body.board-mode {
+      min-width: 0;
+      padding: 24px;
+      background: #e8eaec;
+    }
+
+    body.board-mode .page-intro,
+    body.board-mode .page-footer { display: none; }
+
+    body.board-mode .monitor-screen { border-radius: 20px; box-shadow: 0 12px 32px rgba(25,31,35,.12); }
+    body.board-mode .monitor-screen[data-theme="brutal"] { border-radius: 0; }
+
+    body.standalone-mode {
+      width: 480px;
+      min-width: 480px;
+      height: 480px;
+      min-height: 480px;
+      overflow: hidden;
+      padding: 0;
+      background: transparent;
+    }
+
+    body.standalone-mode .page-intro,
+    body.standalone-mode .page-footer,
+    body.standalone-mode .concept-meta { display: none; }
+
+    body.standalone-mode .gallery-grid,
+    body.standalone-mode .concept,
+    body.standalone-mode .monitor-screen {
+      width: 480px;
+      height: 480px;
+      margin: 0;
+    }
+
+    body.standalone-mode .gallery-grid { display: block; }
+    body.standalone-mode .monitor-screen { border-radius: 0; box-shadow: none; }
+
+    @media (max-width: 2060px) {
+      .gallery-grid { grid-template-columns: repeat(2, 480px); }
+    }
+
+    @media (max-width: 1040px) {
+      .page-intro { width: 480px; display: block; }
+      .page-badge { display: inline-block; margin-top: 14px; }
+      .gallery-grid { width: 480px; grid-template-columns: 480px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-intro">
+    <div>
+      <div class="page-kicker">480 × 480 · reference style edition</div>
+      <h1>Four new indoor monitor directions</h1>
+      <p>Editorial, Swiss, Illustrative and Brutalism reinterpret the same four-sensor experience while keeping every component practical for SquareLine Studio and LVGL.</p>
+    </div>
+    <div class="page-badge">20 screens · 4 visual systems</div>
+  </header>
+
+  <main id="gallery" class="gallery-grid"></main>
+  <footer class="page-footer">All visible interface copy is English. Every More and Back button is interactive.</footer>
+
+  <script>
+    const ICONS = {
+      temperature: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14.7V5.5a3 3 0 0 1 6 0v9.2a5 5 0 1 1-6 0Z"/><path d="M12 7v9"/><path d="M10.3 17.8a1.7 1.7 0 1 0 3.4 0 1.7 1.7 0 0 0-3.4 0Z"/></svg>`,
+      humidity: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8S5.7 9.9 5.7 15.1a6.3 6.3 0 0 0 12.6 0C18.3 9.9 12 2.8 12 2.8Z"/><path d="M9.2 16.2a3.1 3.1 0 0 0 2.9 2"/></svg>`,
+      co2: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.4 9.2h9.2a2.6 2.6 0 1 0-2.4-3.6"/><path d="M3.4 13.2h14.2a2.7 2.7 0 1 1-2.5 3.7"/><path d="M3.4 17.2h6.2"/></svg>`,
+      pm25: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="8" r="2.2"/><circle cx="16.8" cy="6.3" r="1.5"/><circle cx="15.5" cy="15.5" r="3"/><circle cx="6.1" cy="17" r="1.2"/><path d="M9.2 9.5 12.7 13M15.7 7.8l-.3 4.7M8 16.4l4.5-.6"/></svg>`,
+      back: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>`
+    };
+
+    const METRICS = [
+      {
+        key: "temperature", label: "Temperature", value: 23.8, display: "23.8", unit: "°C",
+        min: 0, max: 40, minLabel: "0°", maxLabel: "40°", centerLabel: "24°",
+        status: "Comfortable", rangeText: "Comfort range 20–26 °C"
+      },
+      {
+        key: "humidity", label: "Humidity", value: 55.7, display: "55.7", unit: "%",
+        min: 0, max: 100, minLabel: "0", maxLabel: "100", centerLabel: "56%",
+        status: "Comfortable", rangeText: "Comfort range 30–60 %"
+      },
+      {
+        key: "co2", label: "CO₂", value: 742, display: "742", unit: "ppm",
+        min: 400, max: 2000, minLabel: "400", maxLabel: "2000", centerLabel: "742",
+        status: "Good", rangeText: "Target below 800 ppm"
+      },
+      {
+        key: "pm25", label: "PM2.5", value: 18.4, display: "18.4", unit: "µg/m³",
+        min: 0, max: 150, minLabel: "0", maxLabel: "150", centerLabel: "18",
+        status: "Good", rangeText: "Good below 35 µg/m³"
+      }
+    ];
+
+    const THEMES = {
+      editorial: {
+        number: "08", name: "Editorial Ledger", description: "Serif · hierarchy · white space",
+        kicker: "Indoor report", title: "Room Journal", subtitle: "Living Room — updated now",
+        detailSub: "Living Room — live reading",
+        palette: {
+          temperature: ["#a66e4a", "#efe4d8"],
+          humidity: ["#4a7d9c", "#e6eef2"],
+          co2: ["#66745f", "#e8ece5"],
+          pm25: ["#77716a", "#ebe8e4"]
+        }
+      },
+      swiss: {
+        number: "10", name: "Swiss Grid", description: "Grid · clarity · red accent",
+        kicker: "Environment / 04", title: "INDOOR DASHBOARD", subtitle: "LIVING ROOM / LIVE DATA",
+        detailSub: "LIVING ROOM / SENSOR DETAIL",
+        palette: {
+          temperature: ["#e10600", "#f5e5e4"],
+          humidity: ["#e10600", "#f5e5e4"],
+          co2: ["#e10600", "#f5e5e4"],
+          pm25: ["#e10600", "#f5e5e4"]
+        }
+      },
+      illustrative: {
+        number: "11", name: "Gentle Illustrative", description: "Friendly · pastel · story-led",
+        kicker: "Today's air", title: "Hello, Room!", subtitle: "Everything feels balanced",
+        detailSub: "Living Room · updated just now",
+        palette: {
+          temperature: ["#f18a56", "#fff0e6"],
+          humidity: ["#4ebfbb", "#e8f7f6"],
+          co2: ["#70b986", "#ebf6ee"],
+          pm25: ["#6c5ce7", "#eeeaff"]
+        }
+      },
+      brutal: {
+        number: "07", name: "Signal Brutalism", description: "Hard edges · mono · neon signal",
+        kicker: "// Sensor array", title: "AIR//DASHBOARD", subtitle: "ROOM_01 / SYSTEM_ONLINE",
+        detailSub: "ROOM_01 / REAL_TIME_FEED",
+        palette: {
+          temperature: ["#ffc700", "#2f2a12"],
+          humidity: ["#00f5c3", "#102d27"],
+          co2: ["#00d3a6", "#102a25"],
+          pm25: ["#7d7bff", "#202040"]
+        }
+      }
+    };
+
+    const metricByKey = Object.fromEntries(METRICS.map(metric => [metric.key, metric]));
+
+    function progressOf(metric) {
+      return Math.max(0, Math.min(1, (metric.value - metric.min) / (metric.max - metric.min)));
+    }
+
+    function metricStyle(theme, metric) {
+      const [accent, tint] = THEMES[theme].palette[metric.key];
+      return `--accent:${accent};--tint:${tint};--progress:${(progressOf(metric) * 100).toFixed(2)}%`;
+    }
+
+    function livePill() {
+      return `<div class="live-pill"><span class="live-dot"></span>LIVE</div>`;
+    }
+
+    function motif() {
+      return `<div class="illustration-motif" aria-hidden="true">
+        <span class="motif-sun"></span><span class="motif-hill"></span>
+        <span class="motif-leaf-a"></span><span class="motif-leaf-b"></span>
+      </div>`;
+    }
+
+    function homeMarkup(theme) {
+      const meta = THEMES[theme];
+      const cards = METRICS.map((metric, index) => `
+        <article class="metric-card" style="${metricStyle(theme, metric)}">
+          <span class="card-index">${String(index + 1).padStart(2, "0")}</span>
+          <div class="card-head">
+            <div class="metric-icon-shell">${ICONS[metric.key]}</div>
+            <div class="metric-name">${metric.label}</div>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value">${metric.display}</span>
+            <span class="metric-unit">${metric.unit}</span>
+          </div>
+          ${motif()}
+          <div class="metric-track"><span class="metric-track-fill"></span></div>
+          <div class="card-footer">
+            <div class="card-status"><span class="status-dot"></span>${metric.status}</div>
+            <button class="more-button" type="button" data-open="${metric.key}" aria-label="More about ${metric.label}">
+              More <span class="more-arrow">→</span>
+            </button>
+          </div>
+        </article>
+      `).join("");
+
+      return `
+        <section class="screen-view home-view">
+          <header class="home-header">
+            <div class="header-code">${meta.number}</div>
+            <div class="header-copy">
+              <div class="header-kicker">${meta.kicker}</div>
+              <h3 class="home-title">${meta.title}</h3>
+              <div class="home-subtitle">${meta.subtitle}</div>
+            </div>
+            ${livePill()}
+          </header>
+          <div class="sensor-grid">${cards}</div>
+        </section>
+      `;
+    }
+
+    function gaugeSvg(metric) {
+      const progress = progressOf(metric);
+      const arcLength = 83.3333;
+      const fillLength = Math.max(.01, arcLength * progress);
+      const angle = (120 + progress * 300) * Math.PI / 180;
+      const x = 150 + 104 * Math.cos(angle);
+      const y = 122 + 104 * Math.sin(angle);
+
+      return `
+        <svg class="gauge-svg" viewBox="0 0 300 266" aria-hidden="true">
+          <circle class="gauge-track" cx="150" cy="122" r="104" pathLength="100"
+            stroke-dasharray="83.3333 16.6667" transform="rotate(120 150 122)"/>
+          <circle class="gauge-progress" cx="150" cy="122" r="104" pathLength="100"
+            stroke-dasharray="${fillLength.toFixed(4)} ${(100 - fillLength).toFixed(4)}" transform="rotate(120 150 122)"/>
+          <circle class="gauge-dot-halo" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="10"/>
+          <circle class="gauge-dot" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="6.5"/>
+        </svg>
+      `;
+    }
+
+    function detailMarkup(theme, metric) {
+      const meta = THEMES[theme];
+      const recommendation = metric.rangeText
+        .replace("Comfort range ", "")
+        .replace("Target ", "")
+        .replace("Good ", "");
+
+      return `
+        <section class="screen-view detail-view" style="${metricStyle(theme, metric)}">
+          <header class="detail-header">
+            <button class="back-button" type="button" data-back aria-label="Back to overview">${ICONS.back}</button>
+            <div class="detail-heading">
+              <h3 class="detail-title">${metric.label}</h3>
+              <div class="detail-subtitle">${meta.detailSub}</div>
+            </div>
+            ${livePill()}
+          </header>
+
+          <div class="gauge-zone">
+            <div class="illustration-orbit"></div>
+            ${gaugeSvg(metric)}
+            <div class="gauge-core">
+              <div class="gauge-icon">${ICONS[metric.key]}</div>
+              <div class="gauge-round-value">${metric.centerLabel}</div>
+              <div class="gauge-caption">Current level</div>
+            </div>
+            <div class="range-end range-min">${metric.minLabel}</div>
+            <div class="range-note">${metric.rangeText}</div>
+            <div class="range-end range-max">${metric.maxLabel}</div>
+          </div>
+
+          <div class="reading-panel">
+            <div class="reading-head">
+              <div class="reading-caption">Real-time ${metric.label}</div>
+              <div class="detail-status">${metric.status}</div>
+            </div>
+            <div class="reading-main">
+              <span class="reading-value">${metric.display}</span>
+              <span class="reading-unit">${metric.unit}</span>
+            </div>
+            <div class="reading-meta">
+              <span><strong>Recommended</strong> · ${recommendation}</span>
+              <span>Updated just now</span>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function createScreen(theme, initialScreen = "home", interactive = true) {
+      const frame = document.createElement("div");
+      frame.className = "monitor-screen";
+      frame.dataset.theme = theme;
+
+      const render = (screen, direction = "forward") => {
+        frame.innerHTML = screen === "home"
+          ? homeMarkup(theme)
+          : detailMarkup(theme, metricByKey[screen]);
+        frame.dataset.screen = screen;
+        if (interactive) frame.firstElementChild.classList.add(direction === "back" ? "enter-back" : "enter-forward");
+      };
+
+      if (interactive) {
+        frame.addEventListener("click", event => {
+          const open = event.target.closest("[data-open]");
+          const back = event.target.closest("[data-back]");
+          if (open) render(open.dataset.open, "forward");
+          if (back) render("home", "back");
+        });
+      }
+
+      render(initialScreen);
+      return frame;
+    }
+
+    function createConcept(theme, initialScreen = "home", interactive = true) {
+      const meta = THEMES[theme];
+      const wrapper = document.createElement("section");
+      wrapper.className = "concept";
+      wrapper.innerHTML = `
+        <div class="concept-meta">
+          <div class="concept-number">Style ${meta.number}</div>
+          <h2>${meta.name}</h2>
+          <p>${meta.description}</p>
+        </div>
+      `;
+      wrapper.appendChild(createScreen(theme, initialScreen, interactive));
+      return wrapper;
+    }
+
+    function renderDefault(gallery) {
+      ["editorial", "swiss", "illustrative", "brutal"].forEach(theme => gallery.appendChild(createConcept(theme)));
+    }
+
+    function renderStandalone(gallery, params) {
+      document.body.classList.add("standalone-mode");
+      const theme = THEMES[params.get("theme")] ? params.get("theme") : "editorial";
+      const requested = params.get("screen") || "home";
+      const screen = requested === "home" || metricByKey[requested] ? requested : "home";
+      gallery.appendChild(createConcept(theme, screen, true));
+    }
+
+    function renderBoard(gallery, mode) {
+      document.body.classList.add("board-mode");
+      gallery.className = "board-grid";
+      const screens = mode === "all" ? ["home", ...METRICS.map(metric => metric.key)] : [mode];
+
+      ["editorial", "swiss", "illustrative", "brutal"].forEach(theme => {
+        const column = document.createElement("section");
+        column.className = "board-column";
+        column.innerHTML = `<div class="board-title"><span>${THEMES[theme].name}</span><small>${THEMES[theme].description}</small></div>`;
+        screens.forEach(screen => column.appendChild(createScreen(theme, screen, false)));
+        gallery.appendChild(column);
+      });
+    }
+
+    const params = new URLSearchParams(location.search);
+    const gallery = document.getElementById("gallery");
+
+    if (params.get("standalone") === "1") {
+      renderStandalone(gallery, params);
+    } else if (params.has("board")) {
+      const mode = params.get("board") || "home";
+      renderBoard(gallery, mode === "all" || mode === "home" || metricByKey[mode] ? mode : "home");
+    } else {
+      renderDefault(gallery);
+    }
+  </script>
+</body>
+</html>

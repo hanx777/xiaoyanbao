@@ -20,6 +20,18 @@
 
 ![全部页面总览](previews/preview-all-screens.png)
 
+## 参考风格第二版
+
+项目另外包含一组根据 Editorial、Swiss Style、Illustrative 和 Brutalism 参考图重新设计的第二版界面：
+
+```text
+reference-styles-v2/
+```
+
+第二版包含四套风格、20 个页面和独立的 SquareLine 实现规格。
+
+![第二版四套主页](reference-styles-v2/previews/preview-home-directions.png)
+
 ## 三种设计风格
 
 ### 1. ClearLab
