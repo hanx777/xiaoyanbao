@@ -1,0 +1,128 @@
+{
+  "canvas": {
+    "width": 480,
+    "height": 480
+  },
+  "layout": {
+    "homeHeader": { "x": 18, "y": 16, "width": 444, "height": 60 },
+    "homeGrid": { "x": 18, "y": 88, "cardWidth": 216, "cardHeight": 176, "gap": 12 },
+    "detailHeader": { "x": 18, "y": 15, "width": 444, "height": 50 },
+    "detailGauge": { "x": 90, "y": 67, "width": 300, "height": 266, "rotation": 120, "sweep": 300 },
+    "detailReadingPanel": { "x": 18, "y": 338, "width": 444, "height": 124 }
+  },
+  "themes": {
+    "editorial": {
+      "name": "Editorial Ledger",
+      "background": "#F7F4EF",
+      "card": "#FAF8F4",
+      "text": "#171512",
+      "muted": "#716C65",
+      "line": "#D8D2CA",
+      "track": "#E4DFD8",
+      "font": "Playfair Display or Georgia",
+      "cardRadius": 0,
+      "arcWidth": 8,
+      "metricColors": {
+        "temperature": "#A66E4A",
+        "humidity": "#4A7D9C",
+        "co2": "#66745F",
+        "pm25": "#77716A"
+      }
+    },
+    "swiss": {
+      "name": "Swiss Grid",
+      "background": "#F7F7F7",
+      "card": "#FFFFFF",
+      "text": "#050505",
+      "muted": "#575757",
+      "line": "#BFC1C3",
+      "track": "#DDDDDD",
+      "primary": "#E10600",
+      "font": "Helvetica Neue or Montserrat",
+      "cardRadius": 0,
+      "arcWidth": 14,
+      "metricColors": {
+        "temperature": "#E10600",
+        "humidity": "#E10600",
+        "co2": "#E10600",
+        "pm25": "#E10600"
+      }
+    },
+    "illustrative": {
+      "name": "Gentle Illustrative",
+      "background": "#FFFAF6",
+      "card": "#FFFFFF",
+      "text": "#25213E",
+      "muted": "#746F86",
+      "line": "#EEE9F1",
+      "track": "#ECE9F2",
+      "primary": "#6C5CE7",
+      "font": "Nunito Sans or Montserrat",
+      "cardRadius": 21,
+      "arcWidth": 14,
+      "metricColors": {
+        "temperature": "#F18A56",
+        "humidity": "#4EBFBB",
+        "co2": "#70B986",
+        "pm25": "#6C5CE7"
+      }
+    },
+    "brutal": {
+      "name": "Signal Brutalism",
+      "background": "#0C0D0D",
+      "card": "#111313",
+      "text": "#F1F4F2",
+      "muted": "#9AA39F",
+      "line": "#3A403E",
+      "track": "#26302D",
+      "primary": "#00F5C3",
+      "font": "Roboto Condensed or Montserrat",
+      "cardRadius": 0,
+      "arcWidth": 8,
+      "metricColors": {
+        "temperature": "#FFC700",
+        "humidity": "#00F5C3",
+        "co2": "#00D3A6",
+        "pm25": "#7D7BFF"
+      }
+    }
+  },
+  "metrics": {
+    "temperature": {
+      "label": "Temperature",
+      "value": 23.8,
+      "unit": "°C",
+      "min": 0,
+      "max": 40,
+      "status": "Comfortable",
+      "recommendation": "Comfort range 20–26 °C"
+    },
+    "humidity": {
+      "label": "Humidity",
+      "value": 55.7,
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "status": "Comfortable",
+      "recommendation": "Comfort range 30–60 %"
+    },
+    "co2": {
+      "label": "CO₂",
+      "value": 742,
+      "unit": "ppm",
+      "min": 400,
+      "max": 2000,
+      "status": "Good",
+      "recommendation": "Target below 800 ppm"
+    },
+    "pm25": {
+      "label": "PM2.5",
+      "value": 18.4,
+      "unit": "µg/m³",
+      "min": 0,
+      "max": 150,
+      "status": "Good",
+      "recommendation": "Good below 35 µg/m³"
+    }
+  }
+}
