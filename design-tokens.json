@@ -1,0 +1,98 @@
+{
+  "canvas": {
+    "width": 480,
+    "height": 480
+  },
+  "layout": {
+    "homeHeader": { "x": 20, "y": 17, "width": 440, "height": 52 },
+    "homeGrid": { "x": 18, "y": 80, "cardWidth": 216, "cardHeight": 184, "gap": 12 },
+    "detailBack": { "x": 20, "y": 16, "width": 42, "height": 42 },
+    "detailGauge": { "x": 90, "y": 65, "width": 300, "height": 270, "rotation": 120, "sweep": 300 },
+    "detailReadingPanel": { "x": 20, "y": 338, "width": 440, "height": 124 }
+  },
+  "themes": {
+    "clearLab": {
+      "background": "#F5F9FB",
+      "card": "#FFFFFF",
+      "text": "#173042",
+      "muted": "#637A89",
+      "line": "#DCE8ED",
+      "track": "#E4EDF1",
+      "radius": 20,
+      "metricColors": {
+        "temperature": "#F06B5E",
+        "humidity": "#2E86DE",
+        "co2": "#00A47A",
+        "pm25": "#E39A24"
+      }
+    },
+    "midnightOrbit": {
+      "background": "#070B12",
+      "card": "#101826",
+      "text": "#F4F7FB",
+      "muted": "#8E9CB2",
+      "line": "#243247",
+      "track": "#243247",
+      "radius": 18,
+      "metricColors": {
+        "temperature": "#FFB15C",
+        "humidity": "#36D8F2",
+        "co2": "#55E0A3",
+        "pm25": "#AA8DFF"
+      }
+    },
+    "softHabitat": {
+      "background": "#F6F2EA",
+      "card": "#FFFAF4",
+      "text": "#27322E",
+      "muted": "#6F7B76",
+      "line": "#E8E1D7",
+      "track": "#E3DDD2",
+      "radius": 27,
+      "metricColors": {
+        "temperature": "#D97B5F",
+        "humidity": "#5D9295",
+        "co2": "#78916C",
+        "pm25": "#B18A4F"
+      }
+    }
+  },
+  "metrics": {
+    "temperature": {
+      "label": "Temperature",
+      "value": 23.8,
+      "unit": "°C",
+      "min": 0,
+      "max": 40,
+      "status": "Comfortable",
+      "recommendation": "Comfort range 20–26 °C"
+    },
+    "humidity": {
+      "label": "Humidity",
+      "value": 55.7,
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "status": "Comfortable",
+      "recommendation": "Comfort range 30–60 %"
+    },
+    "co2": {
+      "label": "CO₂",
+      "value": 742,
+      "unit": "ppm",
+      "min": 400,
+      "max": 2000,
+      "status": "Good",
+      "recommendation": "Target below 800 ppm"
+    },
+    "pm25": {
+      "label": "PM2.5",
+      "value": 18.4,
+      "unit": "µg/m³",
+      "min": 0,
+      "max": 150,
+      "status": "Good",
+      "recommendation": "Good below 35 µg/m³"
+    }
+  }
+}

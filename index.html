@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Indoor Monitor — Three 480 × 480 UI Directions</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: #e9edf0;
+      color: #17212b;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; min-height: 100%; }
+
+    body {
+      min-width: 520px;
+      padding: 42px 28px 52px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255,255,255,.95), transparent 31%),
+        #e9edf0;
+    }
+
+    button { font: inherit; }
+
+    .page-intro {
+      width: min(1512px, 100%);
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .page-kicker {
+      margin: 0 0 8px;
+      color: #65727d;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .page-intro h1 {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 44px);
+      letter-spacing: -.045em;
+    }
+
+    .page-intro p {
+      max-width: 620px;
+      margin: 9px 0 0;
+      color: #65727d;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .page-badge {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border: 1px solid #ccd4da;
+      border-radius: 999px;
+      background: rgba(255,255,255,.7);
+      color: #40505c;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .gallery-grid {
+      width: min(1512px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 480px);
+      gap: 36px;
+      align-items: start;
+      justify-content: center;
+    }
+
+    .concept {
+      width: 480px;
+    }
+
+    .concept-meta {
+      min-height: 73px;
+      padding: 0 2px 14px;
+    }
+
+    .concept-number {
+      color: #73808a;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .concept-meta h2 {
+      margin: 5px 0 3px;
+      font-size: 20px;
+      letter-spacing: -.025em;
+    }
+
+    .concept-meta p {
+      margin: 0;
+      color: #6d7a84;
+      font-size: 12px;
+    }
+
+    .monitor-screen {
+      --screen-bg: #f5f9fb;
+      --text: #173042;
+      --muted: #637a89;
+      --line: #dce8ed;
+      --card: #fff;
+      --track: #e4edf1;
+      --status: #188a67;
+      --status-bg: #e9f7f2;
+      position: relative;
+      width: 480px;
+      height: 480px;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--screen-bg);
+      color: var(--text);
+      border-radius: 30px;
+      box-shadow: 0 24px 58px rgba(23, 37, 49, .16), 0 2px 5px rgba(23, 37, 49, .08);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .monitor-screen * { -webkit-tap-highlight-color: transparent; }
+
+    .monitor-screen[data-theme="night"] {
+      --screen-bg: #070b12;
+      --text: #f4f7fb;
+      --muted: #8e9cb2;
+      --line: #243247;
+      --card: #101826;
+      --track: #243247;
+      --status: #45db8a;
+      --status-bg: #142a25;
+      font-family: "Roboto Mono", Consolas, "Segoe UI", monospace;
+    }
+
+    .monitor-screen[data-theme="soft"] {
+      --screen-bg: #f6f2ea;
+      --text: #27322e;
+      --muted: #6f7b76;
+      --line: #e8e1d7;
+      --card: #fffaf4;
+      --track: #e3ddd2;
+      --status: #62816a;
+      --status-bg: #e5efe6;
+      font-family: "Nunito Sans", "Segoe UI", Arial, sans-serif;
+    }
+
+    .screen-view {
+      position: absolute;
+      inset: 0;
+      background: var(--screen-bg);
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .screen-view.enter-forward { animation: enterForward 210ms cubic-bezier(.2,.85,.32,1) both; }
+    .screen-view.enter-back { animation: enterBack 210ms cubic-bezier(.2,.85,.32,1) both; }
+
+    @keyframes enterForward {
+      from { opacity: .45; transform: translateX(28px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes enterBack {
+      from { opacity: .45; transform: translateX(-28px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .home-header {
+      position: absolute;
+      top: 17px;
+      left: 20px;
+      right: 20px;
+      height: 52px;
+    }
+
+    .header-kicker {
+      margin: 0 0 2px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .home-title {
+      margin: 0;
+      font-size: 27px;
+      font-weight: 750;
+      line-height: 1.14;
+      letter-spacing: -.045em;
+    }
+
+    .home-subtitle {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.1;
+    }
+
+    .live-pill {
+      position: absolute;
+      top: 4px;
+      right: 0;
+      height: 28px;
+      min-width: 66px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      color: var(--status);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .06em;
+    }
+
+    .monitor-screen[data-theme="night"] .live-pill {
+      border-color: #254b3c;
+      background: #101f1d;
+    }
+
+    .monitor-screen[data-theme="soft"] .live-pill {
+      border-color: transparent;
+      background: var(--status-bg);
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 16%, transparent);
+    }
+
+    .sensor-grid {
+      position: absolute;
+      top: 80px;
+      left: 18px;
+      width: 444px;
+      display: grid;
+      grid-template-columns: repeat(2, 216px);
+      grid-auto-rows: 184px;
+      gap: 12px;
+    }
+
+    .metric-card {
+      --accent: #2e86de;
+      --tint: #eaf4ff;
+      position: relative;
+      overflow: hidden;
+      padding: 15px 16px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--card);
+      box-shadow: 0 8px 18px rgba(23, 48, 66, .055);
+    }
+
+    .monitor-screen[data-theme="night"] .metric-card {
+      border-radius: 18px;
+      box-shadow: none;
+    }
+
+    .monitor-screen[data-theme="night"] .metric-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 16px;
+      width: 34px;
+      height: 3px;
+      border-radius: 0 0 3px 3px;
+      background: var(--accent);
+    }
+
+    .monitor-screen[data-theme="soft"] .metric-card {
+      border-color: color-mix(in srgb, var(--accent) 12%, #e8e1d7);
+      border-radius: 27px;
+      background: var(--tint);
+      box-shadow: none;
+    }
+
+    .card-head {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .metric-icon-shell {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--tint);
+      color: var(--accent);
+    }
+
+    .monitor-screen[data-theme="night"] .metric-icon-shell {
+      border: 1px solid color-mix(in srgb, var(--accent) 26%, #243247);
+      border-radius: 9px;
+      background: #151f2e;
+    }
+
+    .monitor-screen[data-theme="soft"] .metric-icon-shell {
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--accent) 13%, white);
+    }
+
+    .metric-icon-shell svg,
+    .gauge-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .metric-name {
+      min-width: 0;
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: -.01em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .monitor-screen[data-theme="night"] .metric-name {
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .metric-value-row {
+      height: 55px;
+      margin-top: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .metric-value {
+      font-size: 39px;
+      font-weight: 760;
+      line-height: 1;
+      letter-spacing: -.055em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monitor-screen[data-theme="night"] .metric-value {
+      font-size: 37px;
+      letter-spacing: -.06em;
+      text-shadow: 0 0 20px color-mix(in srgb, var(--accent) 15%, transparent);
+    }
+
+    .metric-unit {
+      max-width: 54px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.05;
+      white-space: normal;
+    }
+
+    .metric-track {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 51px;
+      height: 4px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: var(--track);
+    }
+
+    .metric-track-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--progress);
+      border-radius: inherit;
+      background: var(--accent);
+    }
+
+    .metric-track-dot {
+      position: absolute;
+      top: 50%;
+      left: var(--progress);
+      width: 8px;
+      height: 8px;
+      border: 2px solid var(--card);
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translate(-50%, -50%);
+    }
+
+    .monitor-screen[data-theme="soft"] .metric-track-dot { border-color: var(--tint); }
+
+    .card-footer {
+      position: absolute;
+      left: 16px;
+      right: 13px;
+      bottom: 12px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-status {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 50%;
+      background: var(--status);
+    }
+
+    .more-button {
+      width: 64px;
+      height: 30px;
+      flex: 0 0 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border: 0;
+      border-radius: 10px;
+      background: #f1f6f8;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+      transition: transform 100ms ease, filter 100ms ease;
+    }
+
+    .more-button:hover { filter: brightness(.97); }
+    .more-button:active { transform: translateY(1px) scale(.98); }
+
+    .monitor-screen[data-theme="night"] .more-button {
+      border: 1px solid color-mix(in srgb, var(--accent) 72%, #243247);
+      border-radius: 9px;
+      background: transparent;
+    }
+
+    .monitor-screen[data-theme="soft"] .more-button {
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent) 13%, white);
+    }
+
+    .more-arrow {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1;
+      transform: translateY(-.5px);
+    }
+
+    .detail-header {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      right: 20px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+    }
+
+    .back-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .back-button svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .monitor-screen[data-theme="night"] .back-button {
+      border-radius: 9px;
+      background: #101826;
+    }
+
+    .monitor-screen[data-theme="soft"] .back-button {
+      border-color: transparent;
+      border-radius: 50%;
+      background: #fffaf4;
+    }
+
+    .detail-heading {
+      min-width: 0;
+      margin-left: 12px;
+    }
+
+    .detail-title {
+      margin: 0;
+      overflow: hidden;
+      font-size: 21px;
+      font-weight: 780;
+      line-height: 1.1;
+      letter-spacing: -.035em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .detail-subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 9.5px;
+      line-height: 1;
+    }
+
+    .detail-header .live-pill {
+      top: 7px;
+      right: 0;
+      height: 28px;
+    }
+
+    .gauge-zone {
+      position: absolute;
+      top: 65px;
+      left: 90px;
+      width: 300px;
+      height: 270px;
+      color: var(--accent);
+    }
+
+    .gauge-svg {
+      position: absolute;
+      inset: 0;
+      width: 300px;
+      height: 270px;
+      overflow: visible;
+    }
+
+    .gauge-track,
+    .gauge-progress {
+      fill: none;
+      stroke-linecap: round;
+      stroke-width: 13px;
+    }
+
+    .gauge-track { stroke: var(--track); }
+    .gauge-progress {
+      stroke: var(--accent);
+      filter: drop-shadow(0 4px 6px color-mix(in srgb, var(--accent) 18%, transparent));
+    }
+
+    .monitor-screen[data-theme="night"] .gauge-track,
+    .monitor-screen[data-theme="night"] .gauge-progress { stroke-width: 11px; }
+
+    .monitor-screen[data-theme="night"] .gauge-progress {
+      filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 33%, transparent));
+    }
+
+    .monitor-screen[data-theme="soft"] .gauge-track,
+    .monitor-screen[data-theme="soft"] .gauge-progress { stroke-width: 12px; }
+
+    .gauge-dot-halo { fill: var(--screen-bg); }
+    .gauge-dot { fill: var(--accent); }
+
+    .gauge-core {
+      position: absolute;
+      top: 64px;
+      left: 79px;
+      width: 142px;
+      text-align: center;
+    }
+
+    .gauge-icon {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 8px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+      border-radius: 18px;
+      background: var(--tint);
+      color: var(--accent);
+    }
+
+    .gauge-icon svg { width: 31px; height: 31px; stroke-width: 1.65; }
+
+    .monitor-screen[data-theme="night"] .gauge-icon {
+      border-radius: 12px;
+      background: #151f2e;
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .monitor-screen[data-theme="soft"] .gauge-icon {
+      width: 66px;
+      height: 66px;
+      margin-bottom: 5px;
+      border-color: transparent;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--accent) 12%, white);
+    }
+
+    .gauge-round-value {
+      color: var(--text);
+      font-size: 27px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.05em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monitor-screen[data-theme="night"] .gauge-round-value {
+      color: var(--accent);
+      font-size: 25px;
+      text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 28%, transparent);
+    }
+
+    .gauge-caption {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .range-end {
+      position: absolute;
+      top: 225px;
+      min-width: 54px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    .range-min { left: 21px; }
+    .range-max { right: 21px; }
+
+    .range-center-note {
+      position: absolute;
+      top: 228px;
+      left: 66px;
+      width: 168px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .reading-panel {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 18px;
+      height: 124px;
+      padding: 13px 17px 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: 0 7px 18px rgba(23,48,66,.045);
+    }
+
+    .monitor-screen[data-theme="night"] .reading-panel {
+      border-radius: 15px;
+      box-shadow: none;
+    }
+
+    .monitor-screen[data-theme="soft"] .reading-panel {
+      border-color: color-mix(in srgb, var(--accent) 12%, var(--line));
+      border-radius: 26px;
+      background: var(--tint);
+      box-shadow: none;
+    }
+
+    .reading-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .reading-caption {
+      color: var(--muted);
+      font-size: 9.5px;
+      font-weight: 850;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .detail-status {
+      height: 25px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      background: var(--status-bg);
+      color: var(--status);
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .detail-status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .reading-main {
+      height: 51px;
+      margin-top: 2px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .reading-value {
+      font-size: 46px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.055em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .reading-unit {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .reading-meta {
+      padding-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 650;
+    }
+
+    .monitor-screen[data-theme="soft"] .reading-meta {
+      border-top-color: color-mix(in srgb, var(--accent) 14%, var(--line));
+    }
+
+    .reading-meta strong { color: var(--text); font-weight: 800; }
+
+    .monitor-screen[data-theme="night"] .header-kicker,
+    .monitor-screen[data-theme="night"] .detail-subtitle,
+    .monitor-screen[data-theme="night"] .reading-caption {
+      letter-spacing: .16em;
+    }
+
+    .monitor-screen[data-theme="soft"] .home-title,
+    .monitor-screen[data-theme="soft"] .detail-title {
+      letter-spacing: -.025em;
+    }
+
+    .page-footer {
+      width: min(1512px, 100%);
+      margin: 24px auto 0;
+      color: #71808a;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .board-grid {
+      width: max-content;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 480px);
+      gap: 34px;
+      align-items: start;
+    }
+
+    .board-column {
+      width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .board-title {
+      height: 48px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      color: #465660;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .board-title small {
+      color: #7a8790;
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    body.board-mode {
+      min-width: 0;
+      padding: 24px;
+      background: #e9edf0;
+    }
+
+    body.board-mode .page-intro,
+    body.board-mode .page-footer { display: none; }
+
+    body.board-mode .monitor-screen { border-radius: 24px; box-shadow: 0 12px 34px rgba(23,37,49,.12); }
+
+    body.standalone-mode {
+      width: 480px;
+      min-width: 480px;
+      height: 480px;
+      min-height: 480px;
+      overflow: hidden;
+      padding: 0;
+      background: transparent;
+    }
+
+    body.standalone-mode .page-intro,
+    body.standalone-mode .page-footer { display: none; }
+
+    body.standalone-mode .gallery-grid {
+      width: 480px;
+      height: 480px;
+      display: block;
+      margin: 0;
+    }
+
+    body.standalone-mode .concept,
+    body.standalone-mode .monitor-screen { width: 480px; height: 480px; }
+    body.standalone-mode .concept-meta { display: none; }
+    body.standalone-mode .monitor-screen { border-radius: 0; box-shadow: none; }
+
+    @media (max-width: 1550px) {
+      .gallery-grid { grid-template-columns: repeat(2, 480px); }
+    }
+
+    @media (max-width: 1040px) {
+      .page-intro { width: 480px; display: block; }
+      .page-badge { display: inline-block; margin-top: 16px; }
+      .gallery-grid { width: 480px; grid-template-columns: 480px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-intro">
+    <div>
+      <div class="page-kicker">480 × 480 indoor monitor</div>
+      <h1>Three minimal UI directions</h1>
+      <p>Every “More” button opens a matching detail page. The values, ranges and page structure stay consistent so the visual styles are easy to compare.</p>
+    </div>
+    <div class="page-badge">15 screens · 3 systems</div>
+  </header>
+
+  <main id="gallery" class="gallery-grid"></main>
+  <footer class="page-footer">Choose a direction, then reuse its card, arc and status components across all four sensors.</footer>
+
+  <script>
+    const ICONS = {
+      temperature: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14.7V5.5a3 3 0 0 1 6 0v9.2a5 5 0 1 1-6 0Z"/><path d="M12 7v9"/><path d="M10.3 17.8a1.7 1.7 0 1 0 3.4 0 1.7 1.7 0 0 0-3.4 0Z"/></svg>`,
+      humidity: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8S5.7 9.9 5.7 15.1a6.3 6.3 0 0 0 12.6 0C18.3 9.9 12 2.8 12 2.8Z"/><path d="M9.2 16.2a3.1 3.1 0 0 0 2.9 2"/></svg>`,
+      co2: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.4 9.2h9.2a2.6 2.6 0 1 0-2.4-3.6"/><path d="M3.4 13.2h14.2a2.7 2.7 0 1 1-2.5 3.7"/><path d="M3.4 17.2h6.2"/></svg>`,
+      pm25: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="8" r="2.2"/><circle cx="16.8" cy="6.3" r="1.5"/><circle cx="15.5" cy="15.5" r="3"/><circle cx="6.1" cy="17" r="1.2"/><path d="M9.2 9.5 12.7 13M15.7 7.8l-.3 4.7M8 16.4l4.5-.6"/></svg>`,
+      back: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>`
+    };
+
+    const METRICS = [
+      {
+        key: "temperature",
+        label: "Temperature",
+        value: 23.8,
+        display: "23.8",
+        unit: "°C",
+        min: 0,
+        max: 40,
+        minLabel: "0°",
+        maxLabel: "40°",
+        centerLabel: "24°",
+        status: "Comfortable",
+        rangeText: "Comfort range 20–26 °C",
+        updated: "Updated just now"
+      },
+      {
+        key: "humidity",
+        label: "Humidity",
+        value: 55.7,
+        display: "55.7",
+        unit: "%",
+        min: 0,
+        max: 100,
+        minLabel: "0",
+        maxLabel: "100",
+        centerLabel: "56%",
+        status: "Comfortable",
+        rangeText: "Comfort range 30–60 %",
+        updated: "Updated just now"
+      },
+      {
+        key: "co2",
+        label: "CO₂",
+        value: 742,
+        display: "742",
+        unit: "ppm",
+        min: 400,
+        max: 2000,
+        minLabel: "400",
+        maxLabel: "2000",
+        centerLabel: "742",
+        status: "Good",
+        rangeText: "Target below 800 ppm",
+        updated: "Updated just now"
+      },
+      {
+        key: "pm25",
+        label: "PM2.5",
+        value: 18.4,
+        display: "18.4",
+        unit: "µg/m³",
+        min: 0,
+        max: 150,
+        minLabel: "0",
+        maxLabel: "150",
+        centerLabel: "18",
+        status: "Good",
+        rangeText: "Good below 35 µg/m³",
+        updated: "Updated just now"
+      }
+    ];
+
+    const THEMES = {
+      air: {
+        number: "Direction 01",
+        name: "ClearLab",
+        description: "Bright · clinical · precise",
+        kicker: "Indoor environment",
+        title: "Indoor Air",
+        subtitle: "Living Room · Updated now",
+        detailSub: "Living Room · Live sensor",
+        palette: {
+          temperature: ["#f06b5e", "#fff0ee"],
+          humidity: ["#2e86de", "#eaf4ff"],
+          co2: ["#00a47a", "#e7f7f2"],
+          pm25: ["#e39a24", "#fff5e4"]
+        }
+      },
+      night: {
+        number: "Direction 02",
+        name: "Midnight Orbit",
+        description: "Dark · technical · focused",
+        kicker: "Sensor array / 04",
+        title: "OVERVIEW",
+        subtitle: "ROOM 01 · ALL SYSTEMS ONLINE",
+        detailSub: "ROOM 01 / REAL-TIME FEED",
+        palette: {
+          temperature: ["#ffb15c", "#211d1a"],
+          humidity: ["#36d8f2", "#10262d"],
+          co2: ["#55e0a3", "#12281f"],
+          pm25: ["#aa8dff", "#211c31"]
+        }
+      },
+      soft: {
+        number: "Direction 03",
+        name: "Soft Habitat",
+        description: "Warm · organic · calm",
+        kicker: "At home",
+        title: "Home Air",
+        subtitle: "Living Room · Feeling healthy",
+        detailSub: "Living Room · Updated just now",
+        palette: {
+          temperature: ["#d97b5f", "#fff6f1"],
+          humidity: ["#5d9295", "#f1f8f7"],
+          co2: ["#78916c", "#f4f7f0"],
+          pm25: ["#b18a4f", "#fbf6ec"]
+        }
+      }
+    };
+
+    const metricByKey = Object.fromEntries(METRICS.map(metric => [metric.key, metric]));
+
+    function progressOf(metric) {
+      return Math.max(0, Math.min(1, (metric.value - metric.min) / (metric.max - metric.min)));
+    }
+
+    function metricStyle(theme, metric) {
+      const [accent, tint] = THEMES[theme].palette[metric.key];
+      return `--accent:${accent};--tint:${tint};--progress:${(progressOf(metric) * 100).toFixed(2)}%`;
+    }
+
+    function livePill() {
+      return `<div class="live-pill"><span class="live-dot"></span>LIVE</div>`;
+    }
+
+    function homeMarkup(theme) {
+      const meta = THEMES[theme];
+      const cards = METRICS.map(metric => `
+        <article class="metric-card" style="${metricStyle(theme, metric)}">
+          <div class="card-head">
+            <div class="metric-icon-shell">${ICONS[metric.key]}</div>
+            <div class="metric-name">${metric.label}</div>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value">${metric.display}</span>
+            <span class="metric-unit">${metric.unit}</span>
+          </div>
+          <div class="metric-track" aria-hidden="true">
+            <span class="metric-track-fill"></span>
+            <span class="metric-track-dot"></span>
+          </div>
+          <div class="card-footer">
+            <div class="card-status"><span class="status-dot"></span>${metric.status}</div>
+            <button class="more-button" type="button" data-open="${metric.key}" aria-label="More about ${metric.label}">
+              More <span class="more-arrow">›</span>
+            </button>
+          </div>
+        </article>
+      `).join("");
+
+      return `
+        <section class="screen-view home-view">
+          <header class="home-header">
+            <div class="header-kicker">${meta.kicker}</div>
+            <h3 class="home-title">${meta.title}</h3>
+            <div class="home-subtitle">${meta.subtitle}</div>
+            ${livePill()}
+          </header>
+          <div class="sensor-grid">${cards}</div>
+        </section>
+      `;
+    }
+
+    function gaugeSvg(metric) {
+      const progress = progressOf(metric);
+      const arcLength = 83.3333;
+      const fillLength = Math.max(.01, arcLength * progress);
+      const angle = (120 + progress * 300) * Math.PI / 180;
+      const x = 150 + 105 * Math.cos(angle);
+      const y = 125 + 105 * Math.sin(angle);
+
+      return `
+        <svg class="gauge-svg" viewBox="0 0 300 270" aria-hidden="true">
+          <circle class="gauge-track" cx="150" cy="125" r="105" pathLength="100"
+            stroke-dasharray="83.3333 16.6667" transform="rotate(120 150 125)"/>
+          <circle class="gauge-progress" cx="150" cy="125" r="105" pathLength="100"
+            stroke-dasharray="${fillLength.toFixed(4)} ${(100 - fillLength).toFixed(4)}" transform="rotate(120 150 125)"/>
+          <circle class="gauge-dot-halo" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="11"/>
+          <circle class="gauge-dot" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="7"/>
+        </svg>
+      `;
+    }
+
+    function detailMarkup(theme, metric) {
+      const meta = THEMES[theme];
+      return `
+        <section class="screen-view detail-view" style="${metricStyle(theme, metric)}">
+          <header class="detail-header">
+            <button class="back-button" type="button" data-back aria-label="Back to overview">${ICONS.back}</button>
+            <div class="detail-heading">
+              <h3 class="detail-title">${metric.label}</h3>
+              <div class="detail-subtitle">${meta.detailSub}</div>
+            </div>
+            ${livePill()}
+          </header>
+
+          <div class="gauge-zone">
+            ${gaugeSvg(metric)}
+            <div class="gauge-core">
+              <div class="gauge-icon">${ICONS[metric.key]}</div>
+              <div class="gauge-round-value">${metric.centerLabel}</div>
+              <div class="gauge-caption">Current level</div>
+            </div>
+            <div class="range-end range-min">${metric.minLabel}</div>
+            <div class="range-center-note">${metric.rangeText}</div>
+            <div class="range-end range-max">${metric.maxLabel}</div>
+          </div>
+
+          <div class="reading-panel">
+            <div class="reading-head">
+              <div class="reading-caption">Real-time ${metric.label}</div>
+              <div class="detail-status">${metric.status}</div>
+            </div>
+            <div class="reading-main">
+              <span class="reading-value">${metric.display}</span>
+              <span class="reading-unit">${metric.unit}</span>
+            </div>
+            <div class="reading-meta">
+              <span><strong>Recommended</strong> · ${metric.rangeText.replace("Comfort range ", "").replace("Target ", "").replace("Good ", "")}</span>
+              <span>${metric.updated}</span>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function createScreen(theme, initialScreen = "home", interactive = true) {
+      const frame = document.createElement("div");
+      frame.className = "monitor-screen";
+      frame.dataset.theme = theme;
+
+      const render = (screen, direction = "forward") => {
+        const metric = metricByKey[screen];
+        frame.innerHTML = screen === "home" ? homeMarkup(theme) : detailMarkup(theme, metric);
+        frame.dataset.screen = screen;
+        const view = frame.firstElementChild;
+        if (interactive) view.classList.add(direction === "back" ? "enter-back" : "enter-forward");
+      };
+
+      if (interactive) {
+        frame.addEventListener("click", event => {
+          const more = event.target.closest("[data-open]");
+          const back = event.target.closest("[data-back]");
+          if (more) render(more.dataset.open, "forward");
+          if (back) render("home", "back");
+        });
+      }
+
+      render(initialScreen, "forward");
+      return frame;
+    }
+
+    function createConcept(theme, initialScreen = "home", interactive = true) {
+      const meta = THEMES[theme];
+      const wrapper = document.createElement("section");
+      wrapper.className = "concept";
+      wrapper.innerHTML = `
+        <div class="concept-meta">
+          <div class="concept-number">${meta.number}</div>
+          <h2>${meta.name}</h2>
+          <p>${meta.description}</p>
+        </div>
+      `;
+      wrapper.appendChild(createScreen(theme, initialScreen, interactive));
+      return wrapper;
+    }
+
+    function renderDefault(gallery) {
+      ["air", "night", "soft"].forEach(theme => gallery.appendChild(createConcept(theme)));
+    }
+
+    function renderStandalone(gallery, params) {
+      document.body.classList.add("standalone-mode");
+      const theme = THEMES[params.get("theme")] ? params.get("theme") : "air";
+      const requested = params.get("screen") || "home";
+      const screen = requested === "home" || metricByKey[requested] ? requested : "home";
+      gallery.appendChild(createConcept(theme, screen, true));
+    }
+
+    function renderBoard(gallery, mode) {
+      document.body.classList.add("board-mode");
+      gallery.className = "board-grid";
+      const screens = mode === "all" ? ["home", ...METRICS.map(item => item.key)] : [mode];
+
+      ["air", "night", "soft"].forEach(theme => {
+        const column = document.createElement("section");
+        column.className = "board-column";
+        column.innerHTML = `<div class="board-title"><span>${THEMES[theme].name}</span><small>${THEMES[theme].description}</small></div>`;
+        screens.forEach(screen => column.appendChild(createScreen(theme, screen, false)));
+        gallery.appendChild(column);
+      });
+    }
+
+    const params = new URLSearchParams(location.search);
+    const gallery = document.getElementById("gallery");
+    if (params.get("standalone") === "1") {
+      renderStandalone(gallery, params);
+    } else if (params.has("board")) {
+      const mode = params.get("board") || "home";
+      renderBoard(gallery, mode === "all" || mode === "home" || metricByKey[mode] ? mode : "home");
+    } else {
+      renderDefault(gallery);
+    }
+  </script>
+</body>
+</html>
